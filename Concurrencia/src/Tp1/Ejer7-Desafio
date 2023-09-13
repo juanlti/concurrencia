@@ -1,0 +1,98 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Desafio;
+
+/**
+ *
+ * ;
+ * {
+ *
+ * @author juan.barrera
+ */
+public class tp3Ejer7 {
+
+    static class Letra implements Runnable {
+
+        private MostrarCadena unaCadena;
+        private char unaL;
+
+        public Letra(char unaC, MostrarCadena unaCadena) {
+            this.unaL = unaC;
+            this.unaCadena = unaCadena;
+        }
+
+        @Override
+        public void run() {
+            int t = 0;
+            while (t < 3) {
+                System.out.println("234234");
+                unaL = this.unaCadena.obtenerLetra();
+                //metodo que llama  al recurso compartido
+                Thread letraActual = Thread.currentThread();
+                unaCadena.verificaEntrada(unaL);
+
+                t = t + 1;
+
+            }
+        }
+
+    }
+
+    static class MostrarCadena {
+
+        private char unaLetra;
+
+        private char obtenerLetra() {
+
+            return this.unaLetra;
+        }
+
+//recurso compartido
+        //ABBCCC
+        //""
+        char[] letras = {'A', 'B', 'C'};
+        String cadena = "";
+
+        public void verificaEntrada(char unaL) {
+            cadena = cadena + unaL;
+        }
+
+        public void armarCadena(char unaLetraValida) {
+
+        }
+
+        public String toString() {
+            return "11111111111";
+            //return this.cadena;
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        //1 recurso compartido, mostrar secuencia
+        MostrarCadena unaCadena = new MostrarCadena();
+
+        // 3 Objetos de tipo Letra
+        Letra Rl1 = new Letra('A', unaCadena);
+        Letra Rl2 = new Letra('B', unaCadena);
+        Letra Rl3 = new Letra('C', unaCadena);
+
+        // creo 3 hilos con el objeto tipo letra
+        Thread hl1 = new Thread(Rl1);
+        Thread hl2 = new Thread(Rl2);
+        Thread hl3 = new Thread(Rl3);
+        hl1.start();
+        hl2.start();
+        hl3.start();
+        unaCadena.toString();
+        hl1.join();
+        hl2.join();
+        hl3.join();
+
+        System.out.println("termino");
+
+    }
+
+}
