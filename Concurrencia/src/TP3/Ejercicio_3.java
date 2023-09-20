@@ -5,14 +5,15 @@
  */
 package TP3;
 
+import static java.lang.Thread.sleep;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  *
- * @author juanc
+ * @author juan.barrera
  */
-public class Ejercicio_3 {
+public class Ejer3 {
 
     public static void main(String[] args) throws InterruptedException {
         Tienda unaTienda = new Tienda();
@@ -33,11 +34,13 @@ public class Ejercicio_3 {
 
     static class Tienda {
 
-        private boolean hamacaDisponible = true;
-        private boolean ruedaDisponible = true;
-        private boolean comidaDisponible = true;
+        private Object hamacaDisponible = true;
+        private Object ruedaDisponible = true;
+        private Object comidaDisponible = true;
+
 
         /*
+            
          public synchronized String ObtenerActividadDisponible() {
          
          System.out.println("valor de comer " + this.comidaDisponible);
@@ -66,74 +69,67 @@ public class Ejercicio_3 {
 
          }
          */
-        public void realizarActividad(Thread hamster, String nombre) {
-            // System.out.println("ESTADO DEL HILO " + hamster.getState() + " nombre del hilo  " + hamster.getName() + " nombre del hamster " + nombre);
+        public void realizarEJercicio(Thread hamster) {
 
-            if (comidaDisponible) {
-                synchronized (hamster) {
+            synchronized (ruedaDisponible) {
 
-                    comidaDisponible = false;
+                try {
+                    System.out.println("El hamster " + hamster.getName() + " está ejercitando,");
 
-                    try {
-                        System.out.println("El hamster " + hamster.getName() + " está comiendo, disponibilidad para otros" + this.comidaDisponible);
+                    hamster.sleep(1000);
+                    //System.out.println("El hamster " + hamster.getName() + " está en la rueda.");
 
-                        hamster.sleep(1000);
-                        comidaDisponible = true;
-                        // hamster.sleep(1000);
-                    } catch (InterruptedException ex) {
-                        System.out.println("Hilo muerto");
-                        Logger.getLogger(Ejercicio_3.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    System.out.println("El hamster " + hamster.getName() + " termino  de comer , disponibilidad para otros" + this.comidaDisponible);
+                    //hamster.sleep(1000);
+                    System.out.println("El hamster " + hamster.getName() + " termino de ejercitarse, ");
 
+                } catch (InterruptedException ex) {
+                    System.out.println("Hilo muerto");
+
+                    Logger.getLogger(Ejer3.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } else if (ruedaDisponible) {
-                synchronized (hamster) {
-                    ruedaDisponible = false;
-
-                    try {
-                        System.out.println("El hamster " + hamster.getName() + " está ejercitando, disponibilidad para otros " + this.ruedaDisponible);
-
-                        hamster.sleep(1000);
-                        //System.out.println("El hamster " + hamster.getName() + " está en la rueda.");
-                        ruedaDisponible = true;
-                        //hamster.sleep(1000);
-                        System.out.println("El hamster " + hamster.getName() + " termino de ejercitarse, disponibilidad para otros" + this.ruedaDisponible);
-
-                    } catch (InterruptedException ex) {
-                        System.out.println("Hilo muerto");
-
-                        Logger.getLogger(Ejercicio_3.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-
-            } else if (hamacaDisponible) {
-
-                synchronized (hamster) {
-                    hamacaDisponible = false;
-                    try {
-                        System.out.println("El hamster " + hamster.getName() + " está durmiendo,  disponibilidad para otros " + this.hamacaDisponible);
-
-                        hamster.sleep(1000);
-
-                        //System.out.println("El hamster " + hamster.getName() + " está en la hamaca.");
-                        hamacaDisponible = true;
-                        System.out.println("El hamster" + hamster.getName() + " se desperto (termino de dorminar) , disponibilidad para otros" + this.hamacaDisponible);
-
-                        //hamster.sleep(1000);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(Ejercicio_3.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-
-                }
-            } else {
-                System.out.println("No hay actividades disponibles para el hamster " + hamster.getName());
             }
 
         }
 
+        public void realizarComida(Thread hamster) {
+
+            synchronized (comidaDisponible) {
+
+                try {
+                    System.out.println("El hamster " + hamster.getName() + " está comiendo");
+                    hamster.sleep(3000);
+                    // hamster.sleep(1000);
+                } catch (InterruptedException ex) {
+                    System.out.println("Hilo muerto");
+                    Logger.getLogger(Ejer3.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                System.out.println("El hamster " + hamster.getName() + " termino  de comer ");
+
+            }
+
+        }
+
+        public void realiarDormir(Thread hamster) {
+
+            synchronized (hamacaDisponible) {
+
+                try {
+                    System.out.println("El hamster " + hamster.getName() + " está durmiendo, ");
+
+                    hamster.sleep(2000);
+
+                    //System.out.println("El hamster " + hamster.getName() + " está en la hamaca.");
+                    System.out.println("El hamster" + hamster.getName() + " se desperto (termino de dorminar)");
+
+                    //hamster.sleep(1000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Ejer3.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+
+        }
     }
-    
 
     static class Hamsters extends Thread {
 
@@ -157,30 +153,27 @@ public class Ejercicio_3 {
             int i = 0;
             while (i < 2) {
 
-                    //String estado = this.unaTienda.getEstado();
+                //String estado = this.unaTienda.getEstado();
                 // comer  ejercicio   dormir
-                    /*
+                /*
                   
                     
                  */
                 //this.sleep(300);
                 //unaTienda.realizarActividad(this);
                 try {
-                    while(true){
-                        
-                        
-                        
-                        
-               
+                    while (true) {
 
                         // unaTienda.ObtenerActividadDisponible();
                         Thread hilo = Thread.currentThread();
-                        hilo.sleep(200);
-                        //System.out.println("ESTADO DEL HILO "+hilo.getState() + " nombre del hilo  "+hilo.getName() +" nombre del hamster "+ this.nombre);
-                        unaTienda.realizarActividad(hilo, this.nombre);
-                        hilo.sleep(500);
 
-                         }
+                        //System.out.println("ESTADO DEL HILO "+hilo.getState() + " nombre del hilo  "+hilo.getName() +" nombre del hamster "+ this.nombre);
+                        unaTienda.realizarComida(hilo);
+                        unaTienda.realiarDormir(hilo);
+                        unaTienda.realizarEJercicio(hilo);
+                        hilo.sleep(200);
+
+                    }
                     /*
        
                     
@@ -200,7 +193,7 @@ public class Ejercicio_3 {
                      */
 
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(Ejercicio_3.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Ejer3.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
                 //hilo.sleep(100);
