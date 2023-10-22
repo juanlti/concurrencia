@@ -13,12 +13,12 @@ import java.util.Random;
  */
 public class Test {
 
-    public static void main(String[] args) throws InterruptedException {
+      public static void main(String[] args) throws InterruptedException {
 
         //creo 5 impresoras
-        Impresora[] imp = new Impresora[5];
-        Cliente[] clientes = new Cliente[7];
-        for (int i = 0; i < 5; i++) {
+        Impresora[] imp = new Impresora[10];
+        Cliente[] clientes = new Cliente[25];
+        for (int i = 0; i < imp.length; i++) {
             imp[i] = new Impresora('G');
 
         }
@@ -27,13 +27,13 @@ public class Test {
         GestionImpresion unaGestion = new GestionImpresion(imp);
 
         //creo los clientes, total 7
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < clientes.length; i++) {
             Random random = new Random();
             int randomNumber = random.nextInt((2000 - 500) + 1) + 500;
             clientes[i] = new Cliente(unaGestion, randomNumber);
 
         }
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i <  clientes.length; i++) {
             clientes[i].start();
 
         }
